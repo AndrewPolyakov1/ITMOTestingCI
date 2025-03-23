@@ -1,0 +1,155 @@
+openapi: 3.0.0
+info:
+  title: User Analytics API
+  version: 1.0.0
+paths:
+  /register:
+    post:
+      summary: Register a new user
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+        - in: query
+          name: userName
+          required: true
+          schema:
+            type: string
+          description: The name of the user
+      responses:
+        '200':
+          description: User registered successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Missing parameters
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /recordSession:
+    post:
+      summary: Record a user session
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+        - in: query
+          name: loginTime
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: The login time of the session
+        - in: query
+          name: logoutTime
+          required: true
+          schema:
+            type: string
+            format: date-time
+          description: The logout time of the session
+      responses:
+        '200':
+          description: Session recorded successfully
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Missing parameters or invalid data
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /totalActivity:
+    get:
+      summary: Get total activity time for a user
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+      responses:
+        '200':
+          description: Total activity time in minutes
+          content:
+            text/plain:
+              schema:
+                type: string
+        '400':
+          description: Missing userId
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /inactiveUsers:
+    get:
+      summary: Find inactive users
+      parameters:
+        - in: query
+          name: days
+          required: true
+          schema:
+            type: integer
+          description: Number of days to consider a user inactive
+      responses:
+        '200':
+          description: List of inactive users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: string
+        '400':
+          description: Missing or invalid days parameter
+          content:
+            text/plain:
+              schema:
+                type: string
+
+  /monthlyActivity:
+    get:
+      summary: Get monthly activity metrics for a user
+      parameters:
+        - in: query
+          name: userId
+          required: true
+          schema:
+            type: string
+          description: The ID of the user
+        - in: query
+          name: month
+          required: true
+          schema:
+            type: string
+            format: date
+          description: The month to get activity metrics for (YYYY-MM)
+      responses:
+        '200':
+          description: Monthly activity metrics
+          content:
+            application/json:
+              schema:
+                type: object
+                additionalProperties:
+                  type: integer
+        '400':
+          description: Missing parameters or invalid data
+          content:
+            text/plain:
+              schema:
+                type: string
